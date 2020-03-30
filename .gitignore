@@ -1,0 +1,8 @@
+__pycache__
+
+# Virtual environment
+.homedb 
+
+.pytest_cache
+
+.vscode
