@@ -8,6 +8,8 @@ But for now, just reads and writes files to the machine's disk.
 
 import pathlib
 
+from google.cloud import storage
+
 
 def read(dest: str) -> str:
     """
@@ -28,3 +30,15 @@ def write(dest: str, contents: str):
     path = pathlib.Path(dest)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(contents)
+
+
+def write_to_bucket(bucket: str, destination_key: str, source_file_name: str):
+    """
+    I want to unify the API and just have the details of local versus gc be an implementation detail
+    But for now, just implementing a separate API for GCS.
+    """
+    client = storage.Client()
+    bucket = client.get_bucket(bucket)
+    blob = bucket.blob(destination_key)
+    blob.upload_from_filename(source_file_name)
+    print(True)

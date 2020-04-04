@@ -10,6 +10,7 @@ import dotenv
 import pandas as pd
 
 import env
+import file as f
 from ynab.client import YnabClient
 
 
@@ -40,6 +41,9 @@ def combine(left: List[Dict], right: List[Dict]) -> List[Dict]:
 
 def main():
     """Hacky main for development."""
+
+    env.check(["GOOGLE_APPLICATION_CREDENTIALS", "YNAB_TOKEN"])
+
     token = env.get("YNAB_TOKEN")
     client = YnabClient(token)
     transactions = client.get_transactions(BUDGET_ID)
@@ -47,13 +51,11 @@ def main():
     unrolled = reduce(combine, map(unroll_sub_transactions, transactions))
 
     transactions_frame = pd.DataFrame.from_records(unrolled)
-    print(transactions_frame.describe())
+    f.write("./.cache/transactions.csv", transactions_frame.to_csv())
 
-    # Unroll subtransactions
-    # They have a reference to their parent_id as "transaction_id"
-    # So I think if I just pull subtransactions out and append to the list
-    # Then we should be in pretty good shape
-    print(len(transactions), len(unrolled))
+    f.write_to_bucket(
+        "ynab-transactions", "transactions.csv", "./.cache/transactions.csv"
+    )
 
 
 if __name__ == "__main__":
