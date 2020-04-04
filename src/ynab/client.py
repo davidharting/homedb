@@ -38,8 +38,8 @@ class YnabClient:
             resources = data["data"][resource]
             f.write(cache_path, json.dumps(resources))
             return resources
-        else:
-            return data["error"]
+
+        return data["error"]
 
     def _get_resource(self, resource: str, resource_id: str = ""):
         uri = self._api_url + resource + resource_id

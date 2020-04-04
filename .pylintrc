@@ -1,3 +1,6 @@
 [MESSAGES CONTROL]
-# handled by black
-disable=format
+# Explanations for disabling:
+# format: handled by black
+# CO115,C0116: Sometimes docstrings distract from simple code and test code
+# W0511: Allow TODOs. Now isn't always the right time!
+disable=C0115,C0116,format,W0511

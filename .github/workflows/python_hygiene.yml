@@ -15,15 +15,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
           python-version: 3.8
+
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Format with Black
+
+      - name: Format
         run: black src --check
-      - name: Lint with flake8
+
+      - name: Lint
         run: pylint src
-      - name: Test with pytest
+
+      - name: Test
         run: pytest src

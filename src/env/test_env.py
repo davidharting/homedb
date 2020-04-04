@@ -8,16 +8,18 @@ import env
 
 @pytest.fixture()
 def setup():
+    """Set the SECRET environment variable before each test, and remove it after."""
     os.environ["SECRET"] = "sshhh"
     yield "wait for teardown"
     del os.environ["SECRET"]
 
 
-class TestEnvGet:
-    def test_raises_exception_when_missing(self):
-        with pytest.raises(Exception) as e:
-            env.get("API_KEY")
-        assert "Missing required" in str(e.value)
+def test_get_raises_exception_when_missing():
+    with pytest.raises(Exception) as ex:
+        env.get("API_KEY")
+    assert "Missing required" in str(ex.value)
 
-    def test_returns_environment_variable(self, setup):
-        assert env.get("SECRET") == "sshhh"
+
+@pytest.mark.usefixtures("setup")
+def test_get_returns_environment_variable():
+    assert env.get("SECRET") == "sshhh"
