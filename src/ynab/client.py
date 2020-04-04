@@ -3,7 +3,6 @@ HTTP client for talking to the YNAB API.
 """
 
 import json
-from pathlib import Path
 import requests
 
 import file as f
